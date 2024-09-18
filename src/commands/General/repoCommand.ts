@@ -18,7 +18,7 @@ module.exports = {
         let forks = repoInfo.forks;
 
         let embed = new EmbedBuilder()
-            .setTitle("FerrumC GitHub")
+            .setTitle("FerrumC's GitHub")
             .setColor(Colors.Blue)
             .setDescription(`Check out our [GitHub repository](https://github.com/ferrumc-rs/ferrumc)!`)
             .setFields(
