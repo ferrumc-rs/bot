@@ -1,6 +1,6 @@
 {
   "name": "ferrumc_bot",
-  "module": "index.ts",
+  "module": "src/index.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"
@@ -9,6 +9,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "colorize": "^0.1.0",
     "discord.js": "^14.16.2"
   }
 }
