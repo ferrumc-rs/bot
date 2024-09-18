@@ -14,9 +14,7 @@ module.exports = {
         let embed = new EmbedBuilder()
             .setTitle("About FerrumC")
             .setDescription(`FerrumC is a fully multithreaded Minecraft server implementation written in Rust.\n\`💡\` Check out our [GitHub repository](https://github.com/ferrumc-rs/ferrumc)!`)
-            .addFields(
-                { name: "Released", value: "9th September 2024" }
-            )
+            .setThumbnail('https://ferrumc.netlify.app/assets/ferrumc-trans.png')
 
         return await interaction.reply({ embeds: [embed] })
     }
