@@ -1,0 +1,45 @@
+#   _____               _             
+# |  __ \             (_)            
+# | |__) |_ _ _ __ ___ _ _ __   __ _ 
+# |  ___/ _` | '__/ __| | '_ \ / _` |
+# | |  | (_| | |  \__ \ | | | | (_| |
+# |_|   \__,_|_|  |___/_|_| |_|\__, |
+#                               __/ |
+#                              |___/ 
+
+# This is the parsing config! All configuration for this is in here.
+
+enabled: true
+listening_channels: [] # All Channel IDs that the bot will listen to. Set to an empty array (default) to listen to all channels.
+
+Settings:
+  analysisLimit: 2 # How many solutions can be presented per message:
+  analysisSplit: "\n\n\n" # If analysisLimit > 1, what will the solution messages be split by in the solutions message?
+
+parsing:
+  # The bot uses 'workers', basically what controls the parsing of the text. You want to have at least 2-3 workers.
+  worker_count: 4 # The more workers, the quicker it can parse all images. The more workers, the more resources used.
+
+mentions:
+  mention:
+    reactions:
+      - 👋
+      - ❓
+    responses:
+      - "Hey! How's it going?"
+      - "If you're having trouble, send a message in the help channel(s) and I'll do my best to help!"
+
+keywords:
+  - keyword: "help" # Keyword / Phrase that will be matched to a member's message. Doesn't matter about 
+    reactions: # Supports multiple reactions.
+      - 💗 # Don't want any reactions? just do reactions: ""
+    response: # These are all sent as one message. It just makes it easier to configure. Every message is automatically connected. Every line is a new line.
+      - "Hey there!"
+      - "I'm FerrumC Bot, a Discord Bot created by the FerrumC Team designed to support users!"
+      - "Feel free to send any logs, error messages, or anything else and we'll do our best to help you."
+
+regex:
+  - pattern: "^.+@.+$" # Regex pattern. This is just an example!
+    reactions: ""
+    response:
+      - "Looks like you sent an email."

@@ -1,6 +1,7 @@
 import colorize from 'colorize';
 import { GatewayIntentBits, Client } from 'discord.js';
 import { handle } from './discordEventManager';
+import { init } from './util/parsing/initManager';
 
 const client = new Client({
     intents: [
@@ -13,6 +14,7 @@ const client = new Client({
 
 console.log(colorize.ansify(`#green[(FerrumC)] #grey[Initialising Discord Bot...]`))
 
+init();
 handle(client);
 client.login(process.env.TOKEN)
 

@@ -179,3 +179,5 @@ dist
 node_modules
 .env.local
 config.json
+bun.lockb
+eng.traineddata
