@@ -1,5 +1,5 @@
-const { EmbedBuilder, SlashCommandBuilder, Colors } = require("discord.js")
-const { getRepoInfo } = require("../../util/apiUtil")
+const { EmbedBuilder, SlashCommandBuilder, Colors, time, TimestampStyles } = require("discord.js")
+const { getRepoInfo, getLatest, getBranches } = require("../../util/apiUtil")
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,6 +16,8 @@ module.exports = {
         let starCount = repoInfo.stargazers_count;
         let codeSize = repoInfo.size;
         let forks = repoInfo.forks;
+        let latestCommit = getLatest();
+        let compiledStr = await compile(latestCommit);
 
         let embed = new EmbedBuilder()
             .setTitle("FerrumC's GitHub")
@@ -24,7 +26,8 @@ module.exports = {
             .setFields(
                 { name: "Stars", value: `${starCount}`, inline: true },
                 { name: "Code Size", value: `${formatBytes(codeSize, 2)}`, inline: true},
-                { name: "Forks", value: `${forks}`, inline: true}
+                { name: "Forks", value: `${forks}`, inline: true},
+                { name: "Latest Commit", value :`${compiledStr}`}
             )
             .setThumbnail('https://ferrumc.netlify.app/assets/ferrumc-trans.png')
 
@@ -42,4 +45,17 @@ function formatBytes(bytes: any, decimals = 2) {
     const i = Math.floor(Math.log(bytes) / Math.log(k))
 
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+}
+
+async function compile(latest: any) {
+    if (!latest || JSON.stringify(latest) === '{}') return "N/A";
+    let branches = await getBranches();
+    for (let i = 0; i < branches.length; i++) {
+        if (branches[i].commit.sha === latest.sha) {
+
+            let date = new Date(latest.commit.committer.date);
+            let timestring = time(date);
+            return (`[ferrumc:${branches[i].name}]: ["${latest.commit.message}"](${latest.html_url}) - ${latest.commit.committer.name} | ${time(date, TimestampStyles.RelativeTime)}`)
+        }
+    }
 }

@@ -34,9 +34,28 @@ export async function getTextAttachmentURLs(attachments: any) {
     return urls;
 }
 
+export async function handleDiscordReply(attachments: any) {
+    const imageURLs = [
+        ...await Promise.resolve(getImageAttachmentURLs(attachments))
+    ]
+
+    const parsedText = [
+        ...await Promise.resolve(analyseImageURLs(imageURLs))
+    ]
+
+    const data = getSolutions(
+        "",
+        parsedText.join(' ')
+    )
+
+    return data;
+
+
+}
+
 export async function handleDiscord(message: any, attachments: any) {
     const imageURLs = [
-        ...await Promise.resolve(getImageAttachmentURLs(attachments)),
+        //...await Promise.resolve(getImageAttachmentURLs(attachments)),
         ...await Promise.resolve(getImagesURLsFromContent(message))
     ];
 
