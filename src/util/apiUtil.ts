@@ -25,14 +25,11 @@ export async function getBranches() {
     return res.data;
 }
 
-let latestCommit = {};
-
 function delay(time: number) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-
-export async function getLatestCommit() {
+export async function getLatest() {
     let branches = await getBranches();
     let data = [];
 
@@ -53,7 +50,7 @@ export async function getLatestCommit() {
     let commitData = [];
 
     for (let i = 0; i < data.length; i++) {
-        await delay(1000);
+        await delay(50);
         try {
 
             const res = await octokit.request(data[i], {
@@ -68,14 +65,10 @@ export async function getLatestCommit() {
         }
     }
 
-    latestCommit = commitData.sort((a, b) => {
+    return commitData.sort((a, b) => {
         const dateA = new Date(a.commit.committer.date);
         const dateB = new Date(b.commit.committer.date);
         // Convert dates to milliseconds and compare
         return (dateB.getTime() - dateA.getTime());
     })[0];
-}
-
-export function getLatest() {
-    return latestCommit;
 }

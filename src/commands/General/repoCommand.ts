@@ -16,7 +16,7 @@ module.exports = {
         let starCount = repoInfo.stargazers_count;
         let codeSize = repoInfo.size;
         let forks = repoInfo.forks;
-        let latestCommit = getLatest();
+        let latestCommit = await getLatest();
         let compiledStr = await compile(latestCommit);
 
         let embed = new EmbedBuilder()
