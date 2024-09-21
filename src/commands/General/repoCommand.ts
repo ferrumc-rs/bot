@@ -1,4 +1,4 @@
-const { EmbedBuilder, SlashCommandBuilder, Colors, time, TimestampStyles } = require("discord.js")
+const { EmbedBuilder, SlashCommandBuilder, Colors, time, TimestampStyles, PermissionFlagsBits } = require("discord.js")
 const { getRepoInfo, getLatest, getBranches } = require("../../util/apiUtil")
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
         .setDescription("Get data about the FerrumC project."),
     
     userPermissions: [],
-    botPermissions: [],
+    botPermissions: [ PermissionFlagsBits.SendMessages ],
 
     run: async (client: any, interaction: any) => {
         await interaction.deferReply();

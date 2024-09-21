@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const configParser = require("../../util/parsing/configParser");
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
         .setDescription("Reloads the parsing support configs."),
 
     userPermissions: [PermissionFlagsBits.ManageGuild],
-    botPermissions: [],
+    botPermissions: [ PermissionFlagsBits.SendMessages ],
 
     run: async (client: any, interaction: any) => {
 

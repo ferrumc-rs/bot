@@ -1,6 +1,4 @@
-const { EmbedBuilder } = require("discord.js")
-
-const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder } = require("discord.js")
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -8,8 +6,8 @@ module.exports = {
         .setDescription("Get information concerning FerrumC."),
     
     userPermissions: [],
-    botPermissions: [],
-
+    botPermissions: [ PermissionFlagsBits.SendMessages ],
+    
     run: async (client: any, interaction: any) => {
         let embed = new EmbedBuilder()
             .setTitle("About FerrumC")

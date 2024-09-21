@@ -25,7 +25,8 @@
     "noPropertyAccessFromIndexSignature": false,
     "typeRoots": [
       "./node_modules/@types",
-      "./node_modules/@discordjs/typings"
+      "./node_modules/@discordjs/typings",
+      "./node_modules/discord.js/typings"
     ]
   },
 }

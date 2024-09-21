@@ -1,14 +1,12 @@
-#   _____               _             
-# |  __ \             (_)            
-# | |__) |_ _ _ __ ___ _ _ __   __ _ 
-# |  ___/ _` | '__/ __| | '_ \ / _` |
-# | |  | (_| | |  \__ \ | | | | (_| |
-# |_|   \__,_|_|  |___/_|_| |_|\__, |
-#                               __/ |
-#                              |___/ 
+
 
 # This is the parsing config! All configuration for this is in here.
 
+# ----------------------- WELCOME ----------------------- #
+
+channelID: "" # ID of the channel that welcomes will be sent in.
+
+# ----------------------- PARSING ----------------------- #
 enabled: true
 listening_channels: [] # All Channel IDs that the bot will listen to. Set to an empty array (default) to listen to all channels.
 
