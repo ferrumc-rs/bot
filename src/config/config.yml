@@ -5,6 +5,7 @@
 # ----------------------- WELCOME ----------------------- #
 
 channelID: "" # ID of the channel that welcomes will be sent in.
+message: "Welcome to the FerrumC Discord, {user}!" # Welcome message. {user} is replaced with the user who joined.
 
 # ----------------------- PARSING ----------------------- #
 enabled: true
