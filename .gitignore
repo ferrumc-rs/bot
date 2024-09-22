@@ -181,3 +181,4 @@ node_modules
 config.json
 bun.lockb
 eng.traineddata
+data.db

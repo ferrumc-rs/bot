@@ -3,9 +3,13 @@
 # This is the parsing config! All configuration for this is in here.
 
 # ----------------------- WELCOME ----------------------- #
+Welcomes:
+  channelID: "" # ID of the channel that welcomes will be sent in.
+  message: "Welcome to the FerrumC Discord, {user}!" # Welcome message. {user} is replaced with the user who joined.
 
-channelID: "" # ID of the channel that welcomes will be sent in.
-message: "Welcome to the FerrumC Discord, {user}!" # Welcome message. {user} is replaced with the user who joined.
+# ----------------------- WELCOME ----------------------- #
+Moderation:
+  auditChannelID: "" # Channel where the audit logs go
 
 # ----------------------- PARSING ----------------------- #
 enabled: true
