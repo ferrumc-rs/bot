@@ -23,6 +23,11 @@ module.exports = {
         await interaction.deferReply();
 
         const usr = interaction.options.getUser("member");
+        if (usr.id === interaction.user.id) {
+            return await interaction.editReply({ content: `\`❌\` You cannot kick yourself!`})
+        } else if (usr.roles.highest.position >= interaction.user.roles.highest.position) {
+            return await interaction.editReply({ content: `\`❌\` You cannot ban that member.`})
+        }
         const reason = interaction.options.getString("reason") ?? "No reason provided"
 
         await usr.kick();
