@@ -14,6 +14,7 @@ module.exports = {
         .addStringOption((o: any) => o
             .setName("duration")
             .setDescription("Duration for mute. Format: 1h = 1hour, 1d = 1day, etc")
+            .setRequired(true)
         )
         .addStringOption((o: any) => o
             .setName("reason")
