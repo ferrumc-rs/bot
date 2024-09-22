@@ -22,11 +22,12 @@ module.exports = {
     run: async (client: any, interaction: any) => {
         await interaction.deferReply();
 
-        const usr = interaction.options.getUser("member");
-        if (usr.id === interaction.user.id) {
+        const optionsusr = interaction.options.getUser("member");
+        const usr = await interaction.guild.members.fetch(optionsusr);
+        if (usr.id === interaction.member.id) {
             return await interaction.editReply({ content: `\`❌\` You cannot kick yourself!`})
-        } else if (usr.roles.highest.position >= interaction.user.roles.highest.position) {
-            return await interaction.editReply({ content: `\`❌\` You cannot ban that member.`})
+        } else if (usr.roles.highest.position >= interaction.member.roles.highest.position) {
+            return await interaction.editReply({ content: `\`❌\` You cannot kick that member.`})
         }
         const reason = interaction.options.getString("reason") ?? "No reason provided"
 
@@ -38,7 +39,7 @@ module.exports = {
             .setTitle("User Kicked")
             .setColor("Red")
             .setDescription(
-                `> User: ${usr.username} | <@${usr.id}>\n` +
+                `> User: ${usr.user.username} | <@${usr.id}>\n` +
                 `> Reason: ${reason}\n` +
                 `> Moderator: ${interaction.user.username}`
             )
@@ -48,6 +49,6 @@ module.exports = {
             auditChannel.send({ embeds: [embed] })
         }
 
-        return await interaction.editReply({ content: `\`✅\` Kicked **${usr.username}** with reason *${reason}*.` })
+        return await interaction.editReply({ content: `\`✅\` Kicked **${usr.user.username}** with reason *${reason}*.` })
     }
 }

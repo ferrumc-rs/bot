@@ -14,7 +14,7 @@ module.exports = {
         )
         .addStringOption((o: any) => o
             .setName("duration")
-            .setDescription("Duration for ban ('permanent' for perma). Format: 1h = 1hour, 1d = 1day, etc")
+            .setDescription("Duration for ban (Blank for perma). Format: 1h = 1hour, 1d = 1day, etc")
         )
         .addStringOption((o: any) => o
             .setName("reason")
@@ -28,11 +28,12 @@ module.exports = {
     run: async (client: any, interaction: any) => {
         await interaction.deferReply();
 
-        const usr = interaction.options.getUser("member");
+        const optionsusr = interaction.options.getUser("member");
+        const usr = await interaction.guild.members.fetch(optionsusr);
 
-        if (usr.id === interaction.user.id) {
-            return await interaction.editReply({ content: `\`❌\` You cannot kick yourself!`})
-        } else if (usr.roles.highest.position >= interaction.user.roles.highest.position) {
+        if (usr.id === interaction.member.id) {
+            return await interaction.editReply({ content: `\`❌\` You cannot ban yourself!`})
+        } else if (usr.roles.highest.position >= interaction.member.roles.highest.position) {
             return await interaction.editReply({ content: `\`❌\` You cannot ban that member.`})
         }
 
@@ -48,21 +49,21 @@ module.exports = {
             }
 
             interaction.guild.members.ban(usr)
-            await addTempBanEntry(client, usr.id, usr.username, reason, interaction.user.username, interaction.guild.id, Date.now(), (Date.now() + formatted))
+            await addTempBanEntry(client, usr.id, usr.user.username, reason, interaction.user.username, interaction.guild.id, Date.now(), (Date.now() + formatted))
 
             const future = new Date(Date.now() + formatted);
-            await interaction.editReply({ content: `\`✅\` Temporarily banned **${usr.username}** with reason *${reason}*. (Unban in ${time(future, TimestampStyles.RelativeTime)})` })
+            await interaction.editReply({ content: `\`✅\` Temporarily banned **${usr.user.username}** with reason *${reason}*. (Unban in ${time(future, TimestampStyles.RelativeTime)})` })
         } else {
             const auditChannel = client.channels.cache.get(getConfig().Moderation.auditChannelID)
 
             interaction.guild.members.ban(usr)
-            await interaction.editReply({ content: `\`✅\` Permanently banned **${usr.username}** with reason *${reason}*.` })
+            await interaction.editReply({ content: `\`✅\` Permanently banned **${usr.user.username}** with reason *${reason}*.` })
 
             const embed = new EmbedBuilder()
                 .setTitle("Permanent Ban")
                 .setColor("Red")
                 .setDescription(
-                    `> User: ${name} | <@${usr.id}>\n` +
+                    `> User: ${usr.user.username} | <@${usr.id}>\n` +
                     `> Reason: ${reason}\n` +
                     `> Moderator: ${interaction.user.username}`
                 )
