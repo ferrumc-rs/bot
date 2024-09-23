@@ -2,6 +2,17 @@
 
 # This is the parsing config! All configuration for this is in here.
 
+# ----------------------- LEVELS ----------------------- #
+
+Levels:
+  xpPerMessage: 16 # xp per msg
+  cooldown: 1000 # ms
+
+  levelUpEmbedColor: Green
+  levelUpEmbedDesc: Congratulations, {user}! You have levelled up to **Level {level}**!\n\n`💡` Run `/level toggle` to turn off these pings.
+
+  levelUpChannelID: "Default" # Default for same channel they are in
+
 # ----------------------- WELCOME ----------------------- #
 Welcomes:
   channelID: "" # ID of the channel that welcomes will be sent in.

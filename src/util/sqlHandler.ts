@@ -98,7 +98,7 @@ export async function start(client: any) {
             if (!exists) {
                 await knex.schema
                     .createTable("tempbans", (table: any) => {
-                        table.string("id")
+                        table.string("id").unique()
                         table.string("name")
                         table.string("reason")
                         table.string("moderatorName")
@@ -107,6 +107,79 @@ export async function start(client: any) {
                         table.integer("unbanTime")
                     })
 
+            }
+        })
+
+        await knex.schema.hasTable("levels").then(async function (exists: any) {
+            if (!exists) {
+                await knex.schema
+                    .createTable("levels", (table: any) => {
+                        table.string("id").unique()
+                        table.string("user")
+                        table.string("guild")
+                        table.integer("xp")
+                        table.integer("level")
+                        table.integer("totalXP")
+                        table.string("tag")
+                    })
+            }
+        })
+
+        await knex.schema.hasTable("roles").then(async function (exists: any) {
+            if (!exists) {
+                await knex.schema
+                    .createTable("roles", (table: any) => {
+                        table.string("guildID")
+                        table.string("roleID")
+                        table.integer("level").unique()
+                    })
+            }
+        })
+
+        await knex.schema.hasTable("blacklistTable").then(async function (exists: any) {
+            if (!exists) {
+                await knex.schema
+                    .createTable("blacklistTable", (table: any) => {
+                        table.string("guild")
+                        table.string("typeId")
+                        table.string("type")
+                        table.string("id").unique()
+                    })
+            }
+        })
+
+        await knex.schema.hasTable("settings").then(async function (exists: any) {
+            if (!exists) {
+                await knex.schema
+                    .createTable("settings", (table: any) => {
+                        table.string("guild").unique()
+                        table.string("levelUpMessage")
+                        table.integer("customXP")
+                        table.integer("customCooldown")
+                    })
+            }
+        })
+
+        await knex.schema.hasTable("rankCardTable").then(async function (exists: any) {
+            if (!exists) {
+                await knex.schema
+                    .createTable("rankCardTable", (table: any) => {
+                        table.string("id").unique()
+                        table.string("user")
+                        table.string("guild")
+                        table.string("textColor")
+                        table.string("barColor")
+                        table.string("backgroundColor")
+                    })
+            }
+        })
+
+        await knex.schema.hasTable("turnoffpings").then(async function (exists: any) {
+            if (!exists) {
+                await knex.schema
+                    .createTable("turnoffpings", (table: any) => {
+                        table.string("id").unique()
+                    })
             }
         })
 
