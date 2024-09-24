@@ -31,9 +31,9 @@ module.exports = {
         const optionsusr = interaction.options.getUser("member");
         const usr = await interaction.guild.members.fetch(optionsusr);
         if (usr.id === interaction.member.id) {
-            return await interaction.editReply({ content: `\`❌\` You cannot mute yourself!`})
+            return await interaction.editReply({ content: `\`❌\` You cannot mute yourself!` })
         } else if (usr.roles.highest.position >= interaction.member.roles.highest.position) {
-            return await interaction.editReply({ content: `\`❌\` You cannot mute that member.`})
+            return await interaction.editReply({ content: `\`❌\` You cannot mute that member.` })
         }
         const reason = interaction.options.getString("reason") ?? "No reason provided"
         const duration = interaction.options.getString("duration")
@@ -44,17 +44,17 @@ module.exports = {
             .setColor("Red")
             .setTimestamp()
 
-        if (isNaN(duration)) {
-            return await interaction.editReply({ content: `\`❌\` You must specify a correct duration (e.g. '1d' = 1 day).`})
-        }
-
         if (duration) {
             let formatted: number;
             try {
                 formatted = ms(duration)
             } catch (error: any) {
                 console.log(error);
-                return await interaction.editReply({ content: `\`❌\` You must specify a correct duration (e.g. '1d' = 1 day).`})
+                return await interaction.editReply({ content: `\`❌\` You must specify a correct duration (e.g. '1d' = 1 day).` })
+            }
+
+            if (isNaN(formatted)) {
+                return await interaction.editReply({ content: `\`❌\` You must specify a correct duration (e.g. '1d' = 1 day).` })
             }
 
             usr.timeout(formatted);
@@ -74,7 +74,7 @@ module.exports = {
                 `> Moderator: ${interaction.user.username}`
             )
 
-            await interaction.editReply({ content: `\`✅\` Muted **${usr.user.username}** with reason *${reason}*.`})
+            await interaction.editReply({ content: `\`✅\` Muted **${usr.user.username}** with reason *${reason}*.` })
         }
 
         if (auditChannel) {

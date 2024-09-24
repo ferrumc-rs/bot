@@ -39,9 +39,6 @@ module.exports = {
 
         const reason = interaction.options.getString("reason") ?? "No reason provided"
         const duration = interaction.options.getString("duration")
-        if (isNaN(duration)) {
-            return await interaction.editReply({ content: `\`❌\` You must specify a correct duration (e.g. '1d' = 1 day).`})
-        }
         if (duration) {
             let formatted: number;
             try {
@@ -49,6 +46,10 @@ module.exports = {
             } catch (error: any) {
                 console.log(error)
                 return await interaction.editReply({ content: `\`❌\` You must specify a correct duration (e.g. '1d' = 1 day).` })
+            }
+
+            if (isNaN(formatted)) {
+                return await interaction.editReply({ content: `\`❌\` You must specify a correct duration (e.g. '1d' = 1 day).`})
             }
 
             interaction.guild.members.ban(usr)
