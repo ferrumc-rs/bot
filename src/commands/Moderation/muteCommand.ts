@@ -44,6 +44,10 @@ module.exports = {
             .setColor("Red")
             .setTimestamp()
 
+        if (isNaN(duration)) {
+            return await interaction.editReply({ content: `\`❌\` You must specify a correct duration (e.g. '1d' = 1 day).`})
+        }
+
         if (duration) {
             let formatted: number;
             try {
