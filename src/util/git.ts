@@ -30,6 +30,11 @@ export async function setupGit() {
             );
             console.error(err);
         });
+        console.log(
+            colorize.ansify(
+                "#green[(FerrumC)] #grey[Cloned git repository successfully]"
+            )
+        );
     }
 }
 
