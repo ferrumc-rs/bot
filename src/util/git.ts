@@ -42,35 +42,38 @@ export function setupGit() {
 }
 
 export function getMostRecentCommit() {
-    exec("git fetch", function (error: Error, stdout: string, stderr: string) {
-        if (error) {
-            console.error(
-                colorize.ansify(
-                    "#red[(FerrumC)] #red[Failed to fetch git repository]"
-                )
-            );
-            console.error(stderr);
-        }
-
-        var pretty_text =
-            '--pretty=format:"[%d]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
-        var replace_regex = /\[ \((.*)\)\]/g;
-        exec(
-            "git -C ./git_repo --branches='*' log -1 " + pretty_text,
-            function (error: Error, stdout: string, stderr: string) {
-                if (error) {
-                    console.error(
-                        colorize.ansify(
-                            "#red[(FerrumC)] #red[Failed to get most recent commit]"
-                        )
-                    );
-                    console.error(stderr);
-                } else {
-                    var output = stdout.toLocaleString().trim();
-                    output = output.replace(replace_regex, "$1");
-                    return output;
-                }
+    exec(
+        "git -C ./git_repo pull --all",
+        function (error: Error, stdout: string, stderr: string) {
+            if (error) {
+                console.error(
+                    colorize.ansify(
+                        "#red[(FerrumC)] #red[Failed to fetch git repository]"
+                    )
+                );
+                console.error(stderr);
             }
-        );
-    });
+
+            var pretty_text =
+                '--pretty=format:"[%d]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
+            var replace_regex = /\[ \((.*)\)\]/g;
+            exec(
+                "git -C ./git_repo --branches='*' log -1 " + pretty_text,
+                function (error: Error, stdout: string, stderr: string) {
+                    if (error) {
+                        console.error(
+                            colorize.ansify(
+                                "#red[(FerrumC)] #red[Failed to get most recent commit]"
+                            )
+                        );
+                        console.error(stderr);
+                    } else {
+                        var output = stdout.toLocaleString().trim();
+                        output = output.replace(replace_regex, "$1");
+                        return output;
+                    }
+                }
+            );
+        }
+    );
 }
