@@ -20,7 +20,7 @@ export function setupGit() {
             )
         );
         exec(
-            "git clone --bare https://github.com/ferrumc-rs/ferrumc ./git_repo",
+            "git clone https://github.com/ferrumc-rs/ferrumc ./git_repo",
             function (error: Error, stdout: string, stderr: string) {
                 if (error) {
                     console.error(
@@ -42,7 +42,7 @@ export function setupGit() {
 }
 
 export function getMostRecentCommit() {
-    var proc = Bun.spawnSync(["git", "-C", "./git_repo", "fetch", "--all"]);
+    var proc = Bun.spawnSync(["git", "-C", "./git_repo", "pull", "--all"]);
 
     if (proc.exitCode !== 0) {
         console.log(
@@ -56,11 +56,16 @@ export function getMostRecentCommit() {
 
     var pretty_text =
         '--pretty=format:"[%d]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
-    var replace_regex = /\[.*origin\/(.*)\)\]/g;
-    var proc = Bun.spawnSync(
-        ["git", "log", "--branches='*'", "-1", pretty_text],
-        { cwd: "./git_repo" }
-    );
+    var replace_regex = /\[ \((.*)\)\]/g;
+    var proc = Bun.spawnSync([
+        "git",
+        "-C",
+        "./git_repo",
+        "log",
+        "--branches='*'",
+        "-1",
+        pretty_text,
+    ]);
     if (proc.exitCode !== 0) {
         console.log(
             colorize.ansify(
@@ -71,7 +76,7 @@ export function getMostRecentCommit() {
         return null;
     } else {
         var output = proc.stdout.toLocaleString().trim();
-        //output = output.replace(replace_regex, "$1");
+        output = output.replace(replace_regex, "$1");
         return output;
     }
 }
