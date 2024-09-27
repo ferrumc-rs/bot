@@ -55,7 +55,8 @@ export function getMostRecentCommit() {
     }
 
     var pretty_text =
-        '--pretty=format:"[%S](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
+        "--pretty=format:[%S]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>";
+    var replace_regex = /\[.*origin\/(.*)\)\]/g;
     var proc = Bun.spawnSync([
         "git",
         "-C",
@@ -74,6 +75,8 @@ export function getMostRecentCommit() {
         console.error(proc.stderr);
         return null;
     } else {
-        return proc.stdout.toString().trim();
+        var output = proc.stdout.toLocaleString().trim();
+        //output = output.replace(replace_regex, "$1");
+        return output;
     }
 }
