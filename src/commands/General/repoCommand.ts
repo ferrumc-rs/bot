@@ -18,16 +18,13 @@ module.exports = {
     botPermissions: [PermissionFlagsBits.SendMessages],
 
     run: async (client: any, interaction: any) => {
-        console.log(await getMostRecentCommit());
-        return;
         await interaction.deferReply();
         let repoInfo = await getRepoInfo();
 
         let starCount = repoInfo.stargazers_count;
         let codeSize = repoInfo.size;
         let forks = repoInfo.forks;
-        let latestCommit = await getLatest();
-        let compiledStr = await compile(latestCommit);
+        let compiledStr = await getMostRecentCommit();
 
         let embed = new EmbedBuilder()
             .setTitle("FerrumC's GitHub")
