@@ -6,7 +6,7 @@ const {
     TimestampStyles,
     PermissionFlagsBits,
 } = require("discord.js");
-const { getRepoInfo, getLatest, getBranches } = require("../../util/apiUtil");
+const { getRepoInfo, getBranches } = require("../../util/apiUtil");
 const { getMostRecentCommit } = require("../../util/git");
 
 module.exports = {
@@ -19,12 +19,16 @@ module.exports = {
 
     run: async (client: any, interaction: any) => {
         await interaction.deferReply();
-        let repoInfo = await getRepoInfo();
+        let repoInfoPromise = getRepoInfo();
+        let mostRecentCommitPromise = getMostRecentCommit();
 
+        let [repoInfo, mostRecentCommit] = await Promise.all([
+            repoInfoPromise,
+            mostRecentCommitPromise,
+        ]);
         let starCount = repoInfo.stargazers_count;
         let codeSize = repoInfo.size;
         let forks = repoInfo.forks;
-        let compiledStr = await getMostRecentCommit();
 
         let embed = new EmbedBuilder()
             .setTitle("FerrumC's GitHub")
@@ -40,7 +44,7 @@ module.exports = {
                     inline: true,
                 },
                 { name: "Forks", value: `${forks}`, inline: true },
-                { name: "Latest Commit", value: `${compiledStr}` }
+                { name: "Latest Commit", value: `${mostRecentCommitPromise}` }
             )
             .setThumbnail(
                 "https://ferrumc.netlify.app/assets/ferrumc-trans.png"
