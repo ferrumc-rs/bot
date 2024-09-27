@@ -42,6 +42,7 @@ export function setupGit() {
 }
 
 export function getMostRecentCommit() {
+    let output = "";
     exec(
         "git -C ./git_repo pull --all",
         function (error: Error, stdout: string, stderr: string) {
@@ -68,13 +69,11 @@ export function getMostRecentCommit() {
                         );
                         console.error(stderr);
                     } else {
-                        var output = stdout.toLocaleString().trim();
-                        console.log("first" + output);
-                        //output = output.replace(replace_regex, "$1");
-                        return output;
+                        output = stdout.toLocaleString().trim();
                     }
                 }
             );
         }
     );
+    return output;
 }
