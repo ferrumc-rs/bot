@@ -20,7 +20,7 @@ export function setupGit() {
             )
         );
         exec(
-            "git clone https://github.com/ferrumc-rs/ferrumc ./git_repo",
+            "git clone --bare https://github.com/ferrumc-rs/ferrumc ./git_repo",
             function (error: Error, stdout: string, stderr: string) {
                 if (error) {
                     console.error(
@@ -52,6 +52,7 @@ export function getMostRecentCommit() {
         "-C",
         "./git_repo",
         "log",
+        "--branches='*'",
         "-1",
         pretty_text,
     ]);
