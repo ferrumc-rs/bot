@@ -42,7 +42,7 @@ export function setupGit() {
 }
 
 export function getMostRecentCommit() {
-    Bun.spawnSync(["git", "-C", "./git_repo", "pull", "-all"]);
+    Bun.spawnSync(["git", "-C", "./git_repo", "pull", "--all"]);
 
     var pretty_text =
         "--pretty=format:[%d]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>";
