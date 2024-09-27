@@ -69,6 +69,7 @@ export function getMostRecentCommit() {
                         console.error(stderr);
                     } else {
                         var output = stdout.toLocaleString().trim();
+                        console.log(output);
                         //output = output.replace(replace_regex, "$1");
                         return output;
                     }
