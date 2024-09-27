@@ -42,36 +42,35 @@ export function setupGit() {
 }
 
 export function getMostRecentCommit() {
-    var proc = Bun.spawnSync(["git", "pull", "--all"], { cwd: "./git_repo" });
+    exec("git fetch", function (error: Error, stdout: string, stderr: string) {
+        if (error) {
+            console.error(
+                colorize.ansify(
+                    "#red[(FerrumC)] #red[Failed to fetch git repository]"
+                )
+            );
+            console.error(stderr);
+        }
 
-    if (proc.exitCode !== 0) {
-        console.log(
-            colorize.ansify(
-                "#red[(FerrumC)] #red[Failed to fetch git repository]"
-            )
+        var pretty_text =
+            '--pretty=format:"[%d]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
+        var replace_regex = /\[ \((.*)\)\]/g;
+        exec(
+            "git -C ./git_repo --branches='*' log -1 " + pretty_text,
+            function (error: Error, stdout: string, stderr: string) {
+                if (error) {
+                    console.error(
+                        colorize.ansify(
+                            "#red[(FerrumC)] #red[Failed to get most recent commit]"
+                        )
+                    );
+                    console.error(stderr);
+                } else {
+                    var output = stdout.toLocaleString().trim();
+                    output = output.replace(replace_regex, "$1");
+                    return output;
+                }
+            }
         );
-        console.error(proc.stderr);
-        return null;
-    }
-
-    var pretty_text =
-        '--pretty=format:"[%d]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
-    var replace_regex = /\[ \((.*)\)\]/g;
-    var proc = Bun.spawnSync(
-        ["git", "log", "--branches='*'", "-1", pretty_text],
-        { cwd: "./git_repo" }
-    );
-    if (proc.exitCode !== 0) {
-        console.log(
-            colorize.ansify(
-                "#red[(FerrumC)] #red[Failed to get most recent commit]"
-            )
-        );
-        console.error(proc.stderr);
-        return null;
-    } else {
-        var output = proc.stdout.toLocaleString().trim();
-        output = output.replace(replace_regex, "$1");
-        return output;
-    }
+    });
 }
