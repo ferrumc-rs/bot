@@ -74,7 +74,7 @@ export function getMostRecentCommit() {
         console.error(proc.stderr);
         return null;
     } else {
-        let commit_hash = Bun.spawnSync([
+        let commit_proc = Bun.spawnSync([
             "git",
             "-C",
             "./git_repo",
@@ -82,10 +82,18 @@ export function getMostRecentCommit() {
             "--branches='*'",
             "-1",
             "--format=%H",
-        ])
-            .stdout.toString()
-            .trim();
-        let branch_name = Bun.spawnSync(
+        ]);
+        if (commit_proc.exitCode !== 0) {
+            console.log(
+                colorize.ansify(
+                    "#red[(FerrumC)] #red[Failed to get most recent commit]"
+                )
+            );
+            console.error(commit_proc.stderr);
+            return null;
+        }
+        var commit_hash = commit_proc.stdout.toString().trim();
+        let branch_proc = Bun.spawnSync(
             [
                 "git",
                 "branch",
@@ -99,9 +107,17 @@ export function getMostRecentCommit() {
             {
                 cwd: "./git_repo",
             }
-        )
-            .stdout.toString()
-            .trim();
+        );
+        if (branch_proc.exitCode !== 0) {
+            console.log(
+                colorize.ansify(
+                    "#red[(FerrumC)] #red[Failed to get most recent commit]"
+                )
+            );
+            console.error(branch_proc.stderr);
+            return null;
+        }
+        var branch_name = branch_proc.stdout.toString().trim();
         console.log("Branch name: " + branch_name);
         console.log("Commit hash: " + commit_hash);
         console.log("Output: " + proc.stdout.toString());
