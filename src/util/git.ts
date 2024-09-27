@@ -76,6 +76,7 @@ export function getMostRecentCommit() {
         return null;
     } else {
         var output = proc.stdout.toLocaleString().trim();
+        console.log(output);
         //output = output.replace(replace_regex, "$1");
         return output;
     }
