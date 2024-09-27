@@ -19,6 +19,7 @@ module.exports = {
 
     run: async (client: any, interaction: any) => {
         console.log(getMostRecentCommit());
+        return;
         await interaction.deferReply();
         let repoInfo = await getRepoInfo();
 
