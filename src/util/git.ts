@@ -74,10 +74,15 @@ export function getMostRecentCommit() {
         console.error(proc.stderr);
         return null;
     } else {
-        let commit_hash = Bun.spawnSync(
-            ["git", "log", "--branches='*'", "-1", "--format=%H"],
-            { cwd: "./git_repo" }
-        )
+        let commit_hash = Bun.spawnSync([
+            "git",
+            "-C",
+            "./git_repo",
+            "log",
+            "--branches='*'",
+            "-1",
+            "--format=%H",
+        ])
             .stdout.toString()
             .trim();
         let branch_name = Bun.spawnSync(
