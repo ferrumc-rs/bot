@@ -57,15 +57,10 @@ export function getMostRecentCommit() {
     var pretty_text =
         "--pretty=format:[%S]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>";
     var replace_regex = /\[.*origin\/(.*)\)\]/g;
-    var proc = Bun.spawnSync([
-        "git",
-        "-C",
-        "./git_repo",
-        "log",
-        "--branches='*'",
-        "-1",
-        pretty_text,
-    ]);
+    var proc = Bun.spawnSync(
+        ["git", "log", "--branches='*'", "-1", pretty_text],
+        { cwd: "./git_repo" }
+    );
     if (proc.exitCode !== 0) {
         console.log(
             colorize.ansify(
