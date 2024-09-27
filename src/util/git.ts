@@ -55,7 +55,7 @@ export function getMostRecentCommit() {
             }
 
             var pretty_text =
-                '--pretty=format:"[%d]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
+                '--pretty=format:"[%S]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
             var replace_regex = /\[ \((.*)\)\]/g;
             exec(
                 'git -C ./git_repo log --branches="*" -1 ' + pretty_text,
@@ -69,7 +69,7 @@ export function getMostRecentCommit() {
                         console.error(stderr);
                     } else {
                         var output = stdout.toLocaleString().trim();
-                        console.log(output);
+                        console.log("first" + output);
                         //output = output.replace(replace_regex, "$1");
                         return output;
                     }
