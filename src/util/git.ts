@@ -58,7 +58,7 @@ export function getMostRecentCommit() {
                 '--pretty=format:"[%d]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
             var replace_regex = /\[ \((.*)\)\]/g;
             exec(
-                'git -C ./git_repo --branches=\\"*\\" log -1 ' + pretty_text,
+                'git -C ./git_repo log --branches=\\"*\\" -1 ' + pretty_text,
                 function (error: Error, stdout: string, stderr: string) {
                     if (error) {
                         console.error(
