@@ -21,7 +21,7 @@ export async function setupGit() {
             )
         );
         await exec(
-            "git clone https://github.com/ferrumc-rs/ferrumc ./git_repo"
+            "git clone --bare https://github.com/ferrumc-rs/ferrumc ./git_repo"
         ).catch((err: Error) => {
             console.error(
                 colorize.ansify(
@@ -34,7 +34,7 @@ export async function setupGit() {
 }
 
 export async function getMostRecentCommit() {
-    var { stdout, stderr } = await exec("git -C ./git_repo pull --all").catch(
+    var { stdout, stderr } = await exec("git -C ./git_repo fetch --all").catch(
         (err: Error) => {
             console.error(
                 colorize.ansify(
