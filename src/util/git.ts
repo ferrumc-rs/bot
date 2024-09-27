@@ -85,18 +85,21 @@ export function getMostRecentCommit() {
         ])
             .stdout.toLocaleString()
             .trim();
-        let branch_name = Bun.spawnSync([
-            "git",
-            "-C",
-            "./git_repo",
-            "branch",
-            "--no-color",
-            "--no-column",
-            "--format",
-            '"%(refname:lstrip=2)"',
-            "--contains",
-            commit_hash,
-        ])
+        let branch_name = Bun.spawnSync(
+            [
+                "git",
+                "branch",
+                "--no-color",
+                "--no-column",
+                "--format",
+                '"%(refname:lstrip=2)"',
+                "--contains",
+                commit_hash,
+            ],
+            {
+                cwd: "./git_repo",
+            }
+        )
             .stdout.toLocaleString()
             .trim();
         var output = proc.stdout.toLocaleString().trim();
