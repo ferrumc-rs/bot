@@ -42,7 +42,17 @@ export function setupGit() {
 }
 
 export function getMostRecentCommit() {
-    Bun.spawnSync(["git", "-C", "./git_repo", "fetch", "--all"]);
+    var proc = Bun.spawnSync(["git", "-C", "./git_repo", "fetch", "--all"]);
+
+    if (proc.exitCode !== 0) {
+        console.log(
+            colorize.ansify(
+                "#red[(FerrumC)] #red[Failed to fetch git repository]"
+            )
+        );
+        console.error(proc.stderr);
+        return null;
+    }
 
     var pretty_text =
         "--pretty=format:[%d]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>";
