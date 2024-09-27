@@ -55,8 +55,7 @@ export function getMostRecentCommit() {
     }
 
     var pretty_text =
-        "--pretty=format:[%d]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>";
-    var replace_regex = /\[.*origin\/(.*)\)\]/g;
+        '--pretty=format:" [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
     var proc = Bun.spawnSync([
         "git",
         "-C",
@@ -75,9 +74,34 @@ export function getMostRecentCommit() {
         console.error(proc.stderr);
         return null;
     } else {
+        let commit_hash = Bun.spawnSync([
+            "git",
+            "-C",
+            "./git_repo",
+            "log",
+            "--branches='*'",
+            "-1",
+            "--pretty=format:%H",
+        ])
+            .stdout.toLocaleString()
+            .trim();
+        let branch_name = Bun.spawnSync([
+            "git",
+            "-C",
+            "./git_repo",
+            "branch",
+            "--no-color",
+            "--no-column",
+            "--format",
+            '"%(refname:lstrip=2)"',
+            "--contains",
+            commit_hash,
+        ])
+            .stdout.toLocaleString()
+            .trim();
         var output = proc.stdout.toLocaleString().trim();
+        output = `[${branch_name}]` + output;
         console.log(output);
-        //output = output.replace(replace_regex, "$1");
         return output;
     }
 }
