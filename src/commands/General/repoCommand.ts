@@ -44,7 +44,7 @@ module.exports = {
                     inline: true,
                 },
                 { name: "Forks", value: `${forks}`, inline: true },
-                { name: "Latest Commit", value: `${mostRecentCommitPromise}` }
+                { name: "Latest Commit", value: `${mostRecentCommit}` }
             )
             .setThumbnail(
                 "https://ferrumc.netlify.app/assets/ferrumc-trans.png"
