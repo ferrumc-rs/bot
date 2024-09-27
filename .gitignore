@@ -182,3 +182,5 @@ config.json
 bun.lockb
 eng.traineddata
 data.db
+
+git_repo

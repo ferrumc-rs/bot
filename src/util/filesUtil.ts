@@ -1,5 +1,5 @@
-const fs = require("node:fs")
-const path = require("node:path")
+const fs = require("node:fs");
+const path = require("node:path");
 
 export function getFiles(directory: string, foldersOnly = false) {
     let fileNames = [];
