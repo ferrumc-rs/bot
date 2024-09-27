@@ -55,7 +55,7 @@ export function getMostRecentCommit() {
     }
 
     var pretty_text =
-        '--pretty=format:"[%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
+        '--pretty=format:"[%S](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
     var proc = Bun.spawnSync([
         "git",
         "-C",
@@ -74,56 +74,6 @@ export function getMostRecentCommit() {
         console.error(proc.stderr);
         return null;
     } else {
-        let commit_proc = Bun.spawnSync([
-            "git",
-            "-C",
-            "./git_repo",
-            "log",
-            "--branches='*'",
-            "-1",
-            "--format=%H",
-        ]);
-        if (commit_proc.exitCode !== 0) {
-            console.log(
-                colorize.ansify(
-                    "#red[(FerrumC)] #red[Failed to get most recent commit]"
-                )
-            );
-            console.error(commit_proc.stderr);
-            return null;
-        }
-        var commit_hash = commit_proc.stdout.toString().trim();
-        let branch_proc = Bun.spawnSync(
-            [
-                "git",
-                "branch",
-                "--no-color",
-                "--no-column",
-                "--format",
-                '"%(refname:lstrip=2)"',
-                "--contains",
-                commit_hash,
-            ],
-            {
-                cwd: "./git_repo",
-            }
-        );
-        if (branch_proc.exitCode !== 0) {
-            console.log(
-                colorize.ansify(
-                    "#red[(FerrumC)] #red[Failed to get most recent commit]"
-                )
-            );
-            console.error(branch_proc.stderr);
-            return null;
-        }
-        var branch_name = branch_proc.stdout.toString().trim();
-        console.log("Branch name: " + branch_name);
-        console.log("Commit hash: " + commit_hash);
-        console.log("Output: " + proc.stdout.toString());
-        var output = proc.stdout.toString().trim();
-        var final = `[${branch_name}] ${output}`;
-        console.log("Final: " + final);
-        return final;
+        return proc.stdout.toString().trim();
     }
 }
