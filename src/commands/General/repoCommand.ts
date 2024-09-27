@@ -18,7 +18,7 @@ module.exports = {
     botPermissions: [PermissionFlagsBits.SendMessages],
 
     run: async (client: any, interaction: any) => {
-        console.log(getMostRecentCommit());
+        console.log(await getMostRecentCommit());
         return;
         await interaction.deferReply();
         let repoInfo = await getRepoInfo();

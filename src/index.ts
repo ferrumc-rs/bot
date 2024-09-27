@@ -34,7 +34,7 @@ console.log(
 
 start(client);
 init();
-setupGit();
+await setupGit();
 handle(client);
 client.login(process.env.TOKEN);
 
