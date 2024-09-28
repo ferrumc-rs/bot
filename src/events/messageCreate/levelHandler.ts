@@ -82,25 +82,23 @@ module.exports = async (client: any, message: any) => {
                     .setTimestamp();
 
                 let channelID = getConfig().Levels.levelUpChannelID;
+                const hasPingsOff = await knex("turnoffpings").select("*").where("id", "=", message.author.id).first();
                 try {
                     if (channelID == "Default") {
-                        console.log("SENDING")
-                        message.channel.send({ content: `${message.author}`, embeds: [embed] });
+                        message.channel.send({ content: `${hasPingsOff ? message.author : ""}`, embeds: [embed] });
                     } else {
                         let channel = message.guild.channels.cache.get(channelID);
                         if (channel) {
-                            console.log("SENDINGGGGG")
-                            channel.send({ content: `${message.author}`, embeds: [embed] })
+                            channel.send({ content: `${hasPingsOff ? message.author : ""}`, embeds: [embed] })
                         }
                     }
                 } catch (err) {
-                    console.log(err);
                     if (channelID == "Default") {
-                        message.channel.send({ content: `${message.author}`, embeds: [embed] })
+                        message.channel.send({ content: `${hasPingsOff ? message.author : ""}`, embeds: [embed] })
                     } else {
                         let channel = message.guild.channels.cache.get(channelID);
                         if (channel) {
-                            channel.send({ content: `${message.author}`, embeds: [embed] })
+                            channel.send({ content: `${hasPingsOff ? message.author : ""}`, embeds: [embed] })
                         }
                     }
                 }
@@ -143,5 +141,6 @@ module.exports = async (client: any, message: any) => {
 function antonymsLevelUp(string: any, message: any, level: any) {
     return string
         .replace(/{user}/i, `${message.member}`)
-        .replace(/{level}/i, `${level.level}`);
+        .replace(/{level}/i, `${level.level}`)
+        .replace("<br>", "\n");
 }

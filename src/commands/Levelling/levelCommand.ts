@@ -22,6 +22,10 @@ module.exports = {
                 .setRequired(false)
             )
         )
+        .addSubcommand((subcommand: any) => subcommand
+            .setName("toggle")
+            .setDescription("Toggle being pinged in level up messages..")
+        )
         .toJSON(),
     
     userPermissions: [],

@@ -9,7 +9,7 @@ Levels:
   cooldown: 1000 # ms
 
   levelUpEmbedColor: Green
-  levelUpEmbedDesc: Congratulations, {user}! You have levelled up to **Level {level}**!\n\n`💡` Run `/level toggle` to turn off these pings.
+  levelUpEmbedDesc: Congratulations, {user}! You have levelled up to **Level {level}**!<br><br>`💡` Run `/level toggle` to turn off these pings.
 
   levelUpChannelID: "Default" # Default for same channel they are in
 
