@@ -1,37 +1,41 @@
-var colorize =  require('colorize')
-const { GatewayIntentBits, Client } = require("discord.js")
-const { handle } = require("./discordEventManager")
-const { init } = require('./util/parsing/initManager');
-const { start } = require("./util/sqlHandler")
+var colorize = require("colorize");
+import { GatewayIntentBits, Client } from "discord.js";
+import { handle } from "./discordEventManager";
+import { init } from "./util/parsing/initManager";
+import { start } from "./util/sqlHandler";
+import { setupGit } from "./util/git";
 
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
-    ]
-})
-
-const system = require("node:process");
-
-system.on('unhandledRejection', async (reason: any, promise: any) => {
-    console.log('Unhandled Rejection at:', promise, 'reason', reason);
+        GatewayIntentBits.MessageContent,
+    ],
 });
 
-system.on('uncaughtException', (err: any) => {
-    console.log('Uncaught Exception:', err);
+import system from "node:process";
+
+system.on("unhandledRejection", async (reason: any, promise: any) => {
+    console.log("Unhandled Rejection at:", promise, "reason", reason);
 });
 
-system.on('uncaughtExceptionMonitor', (err: any, origin: any) => {
-    console.log('Uncaught Exception Monitor', err, origin);
+system.on("uncaughtException", (err: any) => {
+    console.log("Uncaught Exception:", err);
 });
 
-console.log(colorize.ansify(`#green[(FerrumC)] #grey[Initialising Discord Bot...]`))
+system.on("uncaughtExceptionMonitor", (err: any, origin: any) => {
+    console.log("Uncaught Exception Monitor", err, origin);
+});
+
+console.log(
+    colorize.ansify(`#green[(FerrumC)] #grey[Initialising Discord Bot...]`)
+);
 
 start(client);
 init();
+await setupGit();
 handle(client);
-client.login(process.env.TOKEN)
+client.login(process.env.TOKEN);
 
-console.log(colorize.ansify(`#green[(FerrumC)] Discord Bot initialised.`))
+console.log(colorize.ansify(`#green[(FerrumC)] Discord Bot initialised.`));
