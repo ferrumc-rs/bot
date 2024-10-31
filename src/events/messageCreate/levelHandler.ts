@@ -85,20 +85,20 @@ module.exports = async (client: any, message: any) => {
                 const hasPingsOff = await knex("turnoffpings").select("*").where("id", "=", message.author.id).first();
                 try {
                     if (channelID == "Default") {
-                        message.channel.send({ content: `${hasPingsOff ? message.author : ""}`, embeds: [embed] });
+                        message.channel.send({ content: `${!hasPingsOff ? message.author : ""}`, embeds: [embed] });
                     } else {
                         let channel = message.guild.channels.cache.get(channelID);
                         if (channel) {
-                            channel.send({ content: `${hasPingsOff ? message.author : ""}`, embeds: [embed] })
+                            channel.send({ content: `${!hasPingsOff ? message.author : ""}`, embeds: [embed] })
                         }
                     }
                 } catch (err) {
                     if (channelID == "Default") {
-                        message.channel.send({ content: `${hasPingsOff ? message.author : ""}`, embeds: [embed] })
+                        message.channel.send({ content: `${!hasPingsOff ? message.author : ""}`, embeds: [embed] })
                     } else {
                         let channel = message.guild.channels.cache.get(channelID);
                         if (channel) {
-                            channel.send({ content: `${hasPingsOff ? message.author : ""}`, embeds: [embed] })
+                            channel.send({ content: `${!hasPingsOff ? message.author : ""}`, embeds: [embed] })
                         }
                     }
                 }
