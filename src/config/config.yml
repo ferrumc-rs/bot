@@ -15,12 +15,12 @@ Levels:
 
 # ----------------------- WELCOME ----------------------- #
 Welcomes:
-  channelID: "" # ID of the channel that welcomes will be sent in.
+  channelID: "1277314214632886295" # ID of the channel that welcomes will be sent in.
   message: "Welcome to the FerrumC Discord, {user}!" # Welcome message. {user} is replaced with the user who joined.
 
 # ----------------------- WELCOME ----------------------- #
 Moderation:
-  auditChannelID: "" # Channel where the audit logs go
+  auditChannelID: "1288860315903332403" # Channel where the audit logs go
 
 # ----------------------- PARSING ----------------------- #
 enabled: true

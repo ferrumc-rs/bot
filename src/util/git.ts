@@ -1,68 +1,100 @@
-var existsSync = require("bun:fs").existsSync;
-var fs = require("fs");
-var colorize = require("colorize");
-const util = require("node:util");
-const exec = util.promisify(require("child_process").exec);
+import { Octokit } from "@octokit/core";
 
-export async function setupGit() {
-    console.log(
-        colorize.ansify("#green[(FerrumC)] #grey[Initialising Git...]")
-    );
-    if (existsSync("./git_repo")) {
-        console.log(
-            colorize.ansify(
-                "#green[(FerrumC)] #grey[Git repository already exists]"
-            )
-        );
-    } else {
-        console.log(
-            colorize.ansify(
-                "#green[(FerrumC)] #grey[Cloning git repository...]"
-            )
-        );
-        await exec(
-            "git clone --bare https://github.com/ferrumc-rs/ferrumc ./git_repo"
-        ).catch((err: Error) => {
-            console.error(
-                colorize.ansify(
-                    "#red[(FerrumC)] #red[Failed to clone git repository]"
-                )
-            );
-            console.error(err);
-        });
-        console.log(
-            colorize.ansify(
-                "#green[(FerrumC)] #grey[Cloned git repository successfully]"
-            )
-        );
-    }
-}
+// Octokit.js
+// https://github.com/octokit/core.js#readme
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
 
 export async function getMostRecentCommit() {
-    var { stdout, stderr } = await exec("git -C ./git_repo fetch --all").catch(
-        (err: Error) => {
-            console.error(
-                colorize.ansify(
-                    "#red[(FerrumC)] #red[Failed to fetch git repository]"
-                )
-            );
-            console.error(stderr);
-        }
-    );
+  let commitRes = await octokit.request("GET /repos/{owner}/{repo}/commits", {
+    owner: "ferrumc-rs",
+    repo: "ferrumc",
+    headers: {
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+  let commit = commitRes.data[0];
+  let time = Math.floor(new Date(commit.commit.author!.date!).getTime() / 1000);
 
-    var pretty_text =
-        '--pretty=format:"[%S]: [%s](https://github.com/ferrumc-rs/ferrumc/commit/%H) - %aN | <t:%at:R>"';
-    var replace_regex = /\[ \((.*)\)\]/g;
-    var { stdout, stderr } = await exec(
-        'git -C ./git_repo log --branches="*" -1 ' + pretty_text
-    ).catch((err: Error) => {
-        console.error(
-            colorize.ansify(
-                "#red[(FerrumC)] #red[Failed to fetch git repository]"
-            )
-        );
-        console.error(stderr);
-    });
-    var output = stdout.replace(replace_regex, "$1");
-    return output;
+  let statusRes = await octokit.request(
+    "GET /repos/{owner}/{repo}/actions/runs?head_sha={ref}",
+    {
+      owner: "ferrumc-rs",
+      repo: "ferrumc",
+      ref: commit.sha,
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    }
+  );
+
+  let emoji = "❔";
+
+  if (statusRes.data.workflow_runs[0].status == "completed") {
+    switch (statusRes.data.workflow_runs[0].conclusion) {
+      case "success":
+        emoji = "✔️";
+        break;
+
+      case "failure":
+        emoji = "❌";
+        break;
+
+      case "pending":
+        emoji = "⏳";
+        break;
+
+      default:
+        break;
+    }
+  } else {
+    emoji = "⏳";
+  }
+
+  let message = `[${commit.author?.login}](${commit.author?.url}) : [${commit.commit.message}](${commit.html_url}) | <t:${time}:R> ${emoji}`;
+  return message;
+}
+
+export async function getStars() {
+  let res = await octokit.request("GET /repos/{owner}/{repo}", {
+    owner: "ferrumc-rs",
+    repo: "ferrumc",
+    headers: {
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+
+  return res.data.stargazers_count;
+}
+
+export async function getForks() {
+  let res = await octokit.request("GET /repos/{owner}/{repo}", {
+    owner: "ferrumc-rs",
+    repo: "ferrumc",
+    headers: {
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+
+  return res.data.forks_count;
+}
+
+export async function getCommits() {
+  let res = await octokit.request(
+    "GET /repos/{owner}/{repo}/commits?sha={branch}&per_page=1&page=1",
+    {
+      owner: "ferrumc-rs",
+      repo: "ferrumc",
+      branch: "master",
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    }
+  );
+
+  let headerText = res.headers.link!.split(",")[1];
+  let commitCount = headerText.match(/&page=(\d+)/)![1];
+
+  return commitCount;
 }
