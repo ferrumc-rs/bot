@@ -18,7 +18,7 @@ module.exports = {
                 `\`3\` Open the form here: [Issue Instructions](https://github.com/ferrumc-rs/ferrumc/issues/new/choose).`
             )
             .setColor(Colors.Blue)
-            .setThumbnail('https://ferrumc.netlify.app/assets/ferrumc-trans.png')
+            .setThumbnail('https://www.ferrumc.com/images/logo_transparent.png')
 
         return await interaction.reply({ embeds: [embed] })
     }
